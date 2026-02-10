@@ -1,0 +1,57 @@
+version: '3.7'
+
+services:
+  # 1. 데이터베이스
+  dspacedb:
+    container_name: dspacedb
+    image: dspace/dspace-postgres-pgcrypto:dspace-9_x
+    environment:
+      PGDATA: /pgdata
+    volumes:
+      - pgdata:/pgdata
+    networks:
+      - dspacenet
+
+  # 2. 백엔드 서버 (API)
+  dspace-server:
+    container_name: dspace-server
+    image: dspace/dspace:dspace-9_x
+    depends_on:
+      - dspacedb
+    environment:
+      - dspace.dir=/dspace
+      - dspace.server.url=http://localhost:8080/server
+      - dspace.ui.url=http://localhost:4000
+      - dspace.name=DSpace-Lab-9x
+      - db.url=jdbc:postgresql://dspacedb:5432/dspace
+      - db.username=dspace
+      - db.password=dspace
+    ports:
+      - "8080:8080"
+    networks:
+      - dspacenet
+    stdin_open: true
+    tty: true
+
+  # 3. 프론트엔드 (화면)
+  dspace-angular:
+    container_name: dspace-angular
+    image: dspace/dspace-angular:dspace-9_x
+    depends_on:
+      - dspace-server
+    environment:
+      - DSPACE_REST_SSL=false
+      - DSPACE_REST_HOST=dspace-server
+      - DSPACE_REST_PORT=8080
+      - DSPACE_REST_NAMESPACE=/server
+    ports:
+      - "4000:4000"
+    networks:
+      - dspacenet
+
+volumes:
+  pgdata:
+
+
+networks:
+  dspacenet:
