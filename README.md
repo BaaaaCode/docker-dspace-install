@@ -19,6 +19,7 @@
 | `docker-compose.yml` | DSpace 9.x (Frontend, Backend, DB) 실행을 위한 오케스트레이션 파일 |
 | `image.tar` | 사전 빌드된 Docker 이미지 패키지 (Backend, Frontend, DB 포함) |
 | `docker.exe` | Docker Desktop 설치 파일 (Windows용) |
+> mac, Linux 등 Window 외 운영체제에서 설치하는 경우 `https://docs.docker.com/desktop/` 에 접속하여 설치 진행바랍니다. 
 
 ---
 
